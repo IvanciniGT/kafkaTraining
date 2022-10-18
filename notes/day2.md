@@ -52,3 +52,28 @@ JAVA
     Kotlin ---> Android
     Scala ----> BigData 
 
+
+# Start a Kafka Cluster
+
+bin/zookeeper-server-start.sconfig/zookeeper.properties 
+bin/kafka-server-start.sh config/server.properties 
+
+# Create a new Topic
+bin/kafka-topics.sh --create --topic firsttopic --bootstrap-server localhost:9092
+
+# List current topics
+bin/kafka-topics.sh --list --b
+
+# Get a topic summary
+bin/kafka-topics.sh --describe --topic firsttopic  --bootstrap-server localhost:9092
+
+
+Topic: firsttopic       
+TopicId: jjyXg4sSQ2iFhQu3W55GRw 
+PartitionCount: 1       
+ReplicationFactor: 1    
+                         Partition: 0    Leader: 0       Replicas: 0,1.         Isr: 0,1 <<< Those are the Replicas that are synchronizewd
+                         Partition: 1    Leader: 1       Replicas: 0,1          Isr: 0,1
+                         
+bin/kafka-console-producer.sh --topic firsttopic  --bootstrap-server localhost:9092
+bin/kafka-console-consumer.sh --topic firsttopic  --bootstrap-server localhost:9092 --from-beginning
