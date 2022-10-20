@@ -61,6 +61,18 @@ bin/kafka-server-start.sh config/server.properties
 # Create a new Topic
 bin/kafka-topics.sh --create --topic firsttopic --bootstrap-server localhost:9092
 
+
+
+bin/kafka-topics.sh --create --topic firsttopic --bootstrap-server localhost:9092 \
+                    --replication-factor 3 --partitions 4
+
+secondtopic 
+    4 partitions and 3 replicas
+
+
+
+
+
 # List current topics
 bin/kafka-topics.sh --list --b
 
@@ -72,8 +84,21 @@ Topic: firsttopic
 TopicId: jjyXg4sSQ2iFhQu3W55GRw 
 PartitionCount: 1       
 ReplicationFactor: 1    
-                         Partition: 0    Leader: 0       Replicas: 0,1.         Isr: 0,1 <<< Those are the Replicas that are synchronizewd
+                         Partition: 0    Leader: 0       Replicas: 0,1.         Isr: 0,1 <<< Those are the Replicas that are synchronized
                          Partition: 1    Leader: 1       Replicas: 0,1          Isr: 0,1
                          
 bin/kafka-console-producer.sh --topic firsttopic  --bootstrap-server localhost:9092
 bin/kafka-console-consumer.sh --topic firsttopic  --bootstrap-server localhost:9092 --from-beginning
+
+
+
+Producers       LoadBalancer                Broker 0.   T3.P0.R0 (100Gb)
+                                                Local HDD -----> Storage Cabinet (3 HDD)
+                HAProxy                     Broker 1.   T3.P0.R1
+                                                Local HDD -----> Storage Cabinet (3 HDD)
+                                            Broker 2 NOT WORKING ANYMORE.   T3.P0.R2 ---- NOT ALIVE ANYMORE
+                                                Local HDD -----> Storage Cabinet (3 HDD)
+                                            
+                                            
+Nowadays we are not going to have a human being in fornt of my production Environment.
+Nowadays, my production environment is run by Kubernetes
