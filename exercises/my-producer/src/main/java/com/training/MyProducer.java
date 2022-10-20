@@ -4,7 +4,7 @@ import org.apache.kafka.clients.producer.*;
 
 import java.util.Properties;
 
-public class MyProducer {
+public class MyProducer implements Callback  {
     
     public static void main( String[] args ) {
         MyProducer myProducer                           = new MyProducer();
@@ -15,7 +15,7 @@ public class MyProducer {
         // 3 - Create a message
         ProducerRecord<String, String> myMessage        = myProducer.createMessage("TOPIC","Key1","Value1");
         // 4 - Send Message
-        myActualKafkaProducer.send(myMessage /*, CallBack*/);
+        myActualKafkaProducer.send(myMessage , myProducer);
         // 5 - Close the producer
         // We are not going to be creating a kafka producer... sending a message and closing it rigth after that
         // What we are going to do is:
@@ -61,6 +61,17 @@ public class MyProducer {
     
 
         // Writing ProducerRecords messages to kafka by using our Producer
+    public void onCompletion​(RecordMetadata metadata, Exception exception){
+        if ( exception != null ){
+            // In case we have an error... maybe we will retry to send the msg in a little bit... or whatever other thing we may need to do with it
+            System.out.println("The message could not be send");
+            System.out.println("     Message: " + metadata.toString() );
+            System.out.println("   Exception: " + exception.getMessage());
+        }else{
+            System.out.println("The message was received and stored by Kafka");
+            System.out.println("     Message: " + metadata.toString() );
+        }
+    }
 
     
 }
