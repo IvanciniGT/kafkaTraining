@@ -21,12 +21,13 @@ public class MyConsumer {
         // 4 - Read Messages
         
         //while(true){
-        ConsumerRecords<String, String> messages = myActualKafkaConsumer.poll(Duration.ofMillis(100));
+        ConsumerRecords<String, String> messages = myActualKafkaConsumer.poll(0); // Duration.ofMillis(100).  TimeFrame
         for (ConsumerRecord<String, String> message : messages){
             System.out.println("Message Received:");
             System.out.println("   Offset: "+ message.offset());
             System.out.println("   Key:    "+ message.key());
             System.out.println("   Value:  "+ message.value());
+            System.out.println("   Value:  "+ message.partition());
         }
         // myActualKafkaConsumer.commitSync(); // if ENABLE_AUTO_COMMIT_CONFIG = "false"
         //}
@@ -63,6 +64,9 @@ public class MyConsumer {
                                      "org.apache.kafka.common.serialization.StringDeserializer");
         myConsumerConfiguration.put( ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                                      "org.apache.kafka.common.serialization.StringDeserializer");
+        // Please read msgs from the beginning
+        myConsumerConfiguration.put( ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
+                                     "earliest");
         return myConsumerConfiguration;
     }
             

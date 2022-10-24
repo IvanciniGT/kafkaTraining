@@ -49,5 +49,7 @@ PRODUCTION DBs < - Extract + TRANSFORM + Send -> Datawarehouse
 
                     Web site
 Sign up form -> Sign up form Processor -> Insert DB
-                                       -> Send a msg to  -> (new_user: USER_INFO)  KAFKA <- Consumer = Send a confirmation email
+                                       -> Send a msg to  -> (new_user: USER_INFO)  KAFKA < - Consumer = Send a confirmation email
                                             (Producer)
+                                            
+                                   

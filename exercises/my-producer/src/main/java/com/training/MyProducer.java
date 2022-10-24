@@ -13,7 +13,17 @@ public class MyProducer implements Callback  {
         // 2 - Create prooducer with taht condifguration
         Producer<String, String> myActualKafkaProducer  = myProducer.createProducer(configuration);
         // 3 - Create a message
-        ProducerRecord<String, String> myMessage        = myProducer.createMessage("TOPIC","Key1","Value1");
+                                                                                      //SEVERITY / RELEVANCE
+        ProducerRecord<String, String> myMessage        = myProducer.createMessage("TOPIC","1","Value1");
+        // 4 - Send Message
+        myActualKafkaProducer.send(myMessage , myProducer);
+        myMessage        = myProducer.createMessage("TOPIC","9","Value1");
+        // 4 - Send Message
+        myActualKafkaProducer.send(myMessage , myProducer);
+        myMessage        = myProducer.createMessage("TOPIC","8","Value1");
+        // 4 - Send Message
+        myActualKafkaProducer.send(myMessage , myProducer);
+        myMessage        = myProducer.createMessage("TOPIC","10","Value1");
         // 4 - Send Message
         myActualKafkaProducer.send(myMessage , myProducer);
         // 5 - Close the producer
@@ -25,6 +35,13 @@ public class MyProducer implements Callback  {
         
         myActualKafkaProducer.close();
         
+        // Imagine we have 10 different values for SEVERITY
+        /*
+        KEY 1, 2, 3 -> PARTITION 0
+        KEY 4, 5, 6, 7, 8 -> PARTITION 1
+        KEY 9 -> PARTITION 2
+        KEY 10 -> PARTITION 3
+        */
     }
 
     public Properties createProducerConfiguration(){
@@ -45,6 +62,10 @@ public class MyProducer implements Callback  {
                                      "org.apache.kafka.common.serialization.StringSerializer");
         myProducerConfiguration.put( ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                                      "org.apache.kafka.common.serialization.StringSerializer");
+        // Class containing the Partitioning algorithm
+        myProducerConfiguration.put( ProducerConfig.PARTITIONER_CLASS_CONFIG,
+                                     "com.training.MyPartitioner");
+                                     
         return myProducerConfiguration;
     }
             

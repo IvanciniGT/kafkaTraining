@@ -143,6 +143,7 @@ KAFKA API
     
         Producer
             (Initialize) < - ProducerConfig
+                                Partitioner
             
             (Send)       < - ProducerRecord = MSG
                          < - CallBack function
