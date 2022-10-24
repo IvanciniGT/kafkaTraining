@@ -1,5 +1,5 @@
 
-$ bin/kafka-topics.sh --create --topic TOPIC --bootstrap-server localhost:9092 \
+$ bin/kafka-topics.sh --create --topic TOPICA --bootstrap-server localhost:9092 \
                     --replication-factor 2 --partitions 4
 
 $ bin/kafka-topics.sh --describe --topic TOPIC --bootstrap-server localhost:9092

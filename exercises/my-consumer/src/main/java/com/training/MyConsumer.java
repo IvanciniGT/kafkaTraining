@@ -8,7 +8,7 @@ import java.time.Duration;
 
 public class MyConsumer {
     
-    public static void main( String[] args ) {
+    public static void main( String[] args ) throws Exception {
         MyConsumer myConsumer                           = new MyConsumer();
         // 1 - Create configuration
         Properties configuration                        = myConsumer.createConsumerConfiguration();
@@ -17,18 +17,24 @@ public class MyConsumer {
         
         
         // 3 - Subscribe to a List of Topics
-        myActualKafkaConsumer.subscribe( Arrays.asList("TOPIC") ); 
+        myActualKafkaConsumer.subscribe( Arrays.asList("TOPICA") ); 
+        // Move to topic 0
+        myActualKafkaConsumer.assignment().forEach(topic -> {
+            myActualKafkaConsumer.seek(topic,0);
+        });
+        myActualKafkaConsumer.poll(0); // To force KAfka to set a commit offset for the first time. Actually 0... or the earliest
         // 4 - Read Messages
         
         //while(true){
-        ConsumerRecords<String, String> messages = myActualKafkaConsumer.poll(0); // Duration.ofMillis(100).  TimeFrame
+        ConsumerRecords<String, String> messages = myActualKafkaConsumer.poll(Duration.ofMillis(100));
         for (ConsumerRecord<String, String> message : messages){
             System.out.println("Message Received:");
             System.out.println("   Offset: "+ message.offset());
             System.out.println("   Key:    "+ message.key());
             System.out.println("   Value:  "+ message.value());
-            System.out.println("   Value:  "+ message.partition());
+            System.out.println("   Partition:  "+ message.partition());
         }
+        //Thread.sleep(100);
         // myActualKafkaConsumer.commitSync(); // if ENABLE_AUTO_COMMIT_CONFIG = "false"
         //}
         
@@ -40,7 +46,7 @@ public class MyConsumer {
         // 2 - That consumer is going to be there for ever sending msgs
         // 3 - If the app stops... Ima close the consumer.
         
-        myActualKafkaConsumer.close();
+        //myActualKafkaConsumer.close();
         
     }
 
@@ -52,7 +58,7 @@ public class MyConsumer {
         // Let KAFKA know Automatically that we received the message
         myConsumerConfiguration.put( ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,  "true"); //false
         // Setup the consumer group
-        myConsumerConfiguration.put( ConsumerConfig.GROUP_ID_CONFIG,            "MY_JAVA_CONSUMERS");
+        myConsumerConfiguration.put( ConsumerConfig.GROUP_ID_CONFIG,            "MY_JAVA_CONSUMERS_8");
             // "all"   =   "-1"    Kafka is going to wait for all isr to have stored the msgs before ack
             // "0"                 The consumer is not going to wait for a confirmation
             // "1"                 Kafka is going to wait for the leader to have stored the msgbefore ack

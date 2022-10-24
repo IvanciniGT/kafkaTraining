@@ -14,16 +14,16 @@ public class MyProducer implements Callback  {
         Producer<String, String> myActualKafkaProducer  = myProducer.createProducer(configuration);
         // 3 - Create a message
                                                                                       //SEVERITY / RELEVANCE
-        ProducerRecord<String, String> myMessage        = myProducer.createMessage("TOPIC","1","Value1");
+        ProducerRecord<String, String> myMessage        = myProducer.createMessage("TOPICA","1","Value2");
         // 4 - Send Message
         myActualKafkaProducer.send(myMessage , myProducer);
-        myMessage        = myProducer.createMessage("TOPIC","9","Value1");
+        myMessage        = myProducer.createMessage("TOPICA","9","Value2");
         // 4 - Send Message
         myActualKafkaProducer.send(myMessage , myProducer);
-        myMessage        = myProducer.createMessage("TOPIC","8","Value1");
+        myMessage        = myProducer.createMessage("TOPICA","8","Value2");
         // 4 - Send Message
         myActualKafkaProducer.send(myMessage , myProducer);
-        myMessage        = myProducer.createMessage("TOPIC","10","Value1");
+        myMessage        = myProducer.createMessage("TOPICA","10","Value2");
         // 4 - Send Message
         myActualKafkaProducer.send(myMessage , myProducer);
         // 5 - Close the producer
