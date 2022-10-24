@@ -45,7 +45,7 @@ KAFKA Cluster
 
     
     KafkaStreamController -> Machine
-        start KafkStream
+        start KafkaStream
 
 We are going to have program (KafkaStream) which is going to be started from any remote machine
 
@@ -56,3 +56,77 @@ By using KafkaStream we may:
 - Tranform the information
 
 
+----
+Have you ever work with Functional Programming before?
+
+Programming paradigms: Styles of writing out code
+- Imperative
+    -   if else for while
+- Procedural. That is when we have a the opportunity (ability) to use and define custom (functions / procedures) methods
+    - privacy modifier + returned type + name of the function + arguments
+- Functional programming. When we can reference a function from a variable
+    - C, C#, PYTHON
+    - =>
+- Object Oriented Programming: We work with those concepts called CLASS / INSTANCE / INHERITANCE
+    - class interface extends implements override
+In java since version 10, 11 we can create scripts... with no classes at all
+
+
+
+    
+
+Programming languages
+            _________ same as Italian, Spanish or English
+
+Place the chair below the window!           Imperative.   ACTION needed to achieve an state
+A chair needs to be placed under the window Declarative.  STATE
+-------------------------------------------------------------------
+There is a chair below the window           Affirmative
+There is no chair below the window          Negative
+Is there a chair below the window.          Interrogative. Question
+
+
+-----
+
+MSG ---> Count the amount of times each word appears in the text
+ I can summarize (sum) all those value....
+    TWITTER Trending topics
+    #Hashtag
+    
+Create a publication for my WALL -> msg 
+what do I need to do with that msg?
+    - Publish that in my wall / persist DB
+    - Count the Hashtags
+    
+    
+Publish tweet -> Synchronous or an Asyncronous operation?
+
+|----Screen----------------------------------|
+|                      NOTIFICATIONS+1       |
+|                                            |
+|                                            |
+|                                            |
+|       FORM to publish -> SEND              |
+|               Contains a picture           | scanned to perform a face recognition?
+|                                            |
+
+
+EVENT           LOGGED
+SEND ----> Add that msg to KAFKA
+            TOPIC ---> JUST-CREATED-MSGS    > ---- Which is going to persist that msg in the DB
+                                            > ---- Which is going to detect and sum hashtags
+                                                    list of Hashtags. ^^^ KafkaStream
+                                                        |
+                       HASHTAGS         < ---------------
+                         ^
+                         |_  Consumer (Each hour ) -> SUM Those... and order them 
+                                                        Filter: TOP 10 
+                                                        
+KafkaStream
+
+Program.... 
+    Connect to a kafka cluster
+    Define a program that needs to be executed inside the kafka cluster
+        FUNCTIONAL PROGRAMMING
+    start that program
+    It can finish or be doing that FOREVER... dependening on the requirements.
