@@ -7,6 +7,7 @@ import org.apache.kafka.streams.*;
 import org.apache.kafka.streams.kstream.*;
 
 import java.util.*;
+import java.util.regex.*;
 
 public class MyStream {
     
@@ -39,9 +40,9 @@ public class MyStream {
 
     private static Properties createKafkaStreamConfiguration(){
         Properties configuration=new Properties();
-        configuration.put( StreamsConfig.BOOTSTRAP_SERVERS                     , "localhost:9092" );
+        configuration.put( StreamsConfig.BOOTSTRAP_SERVERS_CONFIG              , "localhost:9092" );
         configuration.put( StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG        , Serdes.String().getClass().getName() );
-        configuration.put( StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG      , "org.apache.kafka.common.serialization.Serdes.StringSerde" );
+        configuration.put( StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG      , "org.apache.kafka.common.serialization.Serdes$StringSerde" );
         
         configuration.put( StreamsConfig.APPLICATION_ID_CONFIG                 , "wordcounter" );
         configuration.put( StreamsConfig.STATE_DIR_CONFIG                      , "/tmp/mystream" );
@@ -50,16 +51,26 @@ public class MyStream {
     }
     
     private static Topology createOurProcessLogic(){
+        
+        Pattern separateWords = Pattern.compile("[-\\s_.;,:()]+");
+        Pattern removeHashtags = Pattern.compile("#");
+        
         StreamsBuilder builder= new StreamsBuilder();
         // Logic
         // The topic where my msgs are stored
-        builder.stream("INPUTTOPIC")
+        KStream<String,String> words = builder.stream("TWEETS");                                                // KStream<String,​String>
         // The actual process that I want to be applied to those msgs
                 // Twtter trendingTopics
-        
-        
+        words                
+                .flatMapValues(value -> Arrays.asList(separateWords.split(value)) )
+                .filter((key, word) -> word.startsWith("#"))
+                .mapValues( word -> word.toUpperCase())
+                .flatMapValues(value -> Arrays.asList(removeHashtags.split(value)) )
+                .filterNot((key, word) -> word.equals(""))
+
         // The topic where my processed msgs should be stored
-                .toStream().to("OUTPUTTOPIC");
+                //.toStream()
+                .to("HASHTAGS");
         /////////
         return builder.build();
     }
