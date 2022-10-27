@@ -1,10 +1,11 @@
 WebUI                           KAFKA                   BACKEND
 Native Smartphone App
     tweets          ---->    TWEETS         < ----------  Persist Tweet in DB
-                               |           
-                               V
-                             HASHTAGS       < ----------  Calculate trending topics
-    
+                                |    |           
+                                |    V
+                                | HASHTAGS       < -----  Calculate trending topics
+                                v
+                                @                          Send a notification to a user which is cited
     
     
 I won't lose information in case the BACK END is not runnng
@@ -54,6 +55,8 @@ PROCESS:
 ----
 MAP REDUCE?
 
+Map functions are applied in lazy mode... They are only applies prior to a REDUCE funcion
+
 COLLECTION1 ----> MAP FUNCTIONS -----> COLLECTION2
 1                   +2                      3
 2                                           4
@@ -86,3 +89,9 @@ bin/kafka-console-consumer.sh --topic TWEETS  --bootstrap-server localhost:9092 
 bin/kafka-console-consumer.sh --topic HASHTAGS  --bootstrap-server localhost:9092 --from-beginning
 
 bin/kafka-console-producer.sh --topic TWEETS  --bootstrap-server localhost:9092 
+
+
+SQL
+
+
+SELECT count(*) FROM TABLE GROUP BY word;

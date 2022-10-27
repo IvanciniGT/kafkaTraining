@@ -54,6 +54,9 @@ public class MyStream {
         
         Pattern separateWords = Pattern.compile("[-\\s_.;,:()]+");
         Pattern removeHashtags = Pattern.compile("#");
+        final Serde<String> wordSerde = Serdes.String();
+        final Serde<Long> countSerder = Serdes.Long();
+        
         
         StreamsBuilder builder= new StreamsBuilder();
         // Logic
@@ -67,10 +70,11 @@ public class MyStream {
                 .mapValues( word -> word.toUpperCase())
                 .flatMapValues(value -> Arrays.asList(removeHashtags.split(value)) )
                 .filterNot((key, word) -> word.equals(""))
-
+                .groupBy((key, word) -> word)   // SELECT count(*) FROM TABLE GROUP BY word;
+                .count()  // Reduce
         // The topic where my processed msgs should be stored
-                //.toStream()
-                .to("HASHTAGS");
+                .toStream()
+                .to("HASHTAGS", Produced.with(wordSerde,countSerder));
         /////////
         return builder.build();
     }
