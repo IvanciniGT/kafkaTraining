@@ -64,7 +64,7 @@ public class MyStream {
         KStream<String,String> words = builder.stream("TWEETS");                                                // KStream<String,​String>
         // The actual process that I want to be applied to those msgs
                 // Twtter trendingTopics
-        words                
+        KStream<String,Long> counts = words                
                 .flatMapValues(value -> Arrays.asList(separateWords.split(value)) )
                 .filter((key, word) -> word.startsWith("#"))
                 .mapValues( word -> word.toUpperCase())
@@ -73,8 +73,10 @@ public class MyStream {
                 .groupBy((key, word) -> word)   // SELECT count(*) FROM TABLE GROUP BY word;
                 .count()  // Reduce
         // The topic where my processed msgs should be stored
-                .toStream()
-                .to("HASHTAGS", Produced.with(wordSerde,countSerder));
+                .toStream(); 
+                
+                counts.to("HASHTAGS", Produced.with(wordSerde,countSerder));
+                //counts.to("HASHTAGS", Produced.with(wordSerde,countSerder));
         /////////
         return builder.build();
     }
